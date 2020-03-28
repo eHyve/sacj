@@ -86,5 +86,21 @@ namespace Sacj.Api.Controllers
             var result = await googleRepo.GetAllMerchants();
             return result;
         }
+
+        [HttpGet("email/all")] //Génération PDF
+        public async Task<int> GenerateAllEmails()
+        {
+            var emailRepo = new EmailRepo();
+            var result = await emailRepo.GenerateAllEmails();
+            return result;
+        }
+
+        [HttpGet("email/{productId}")] //Génération PDF par commerçant
+        public async Task<int> GenerateEmailById(long productId)
+        {
+            var emailRepo = new EmailRepo();
+            var result = await emailRepo.GenerateEmailsById(productId);
+            return result;
+        }
     }
 }

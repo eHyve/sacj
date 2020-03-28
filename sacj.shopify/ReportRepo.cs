@@ -67,7 +67,7 @@ namespace sacj.shopify
                     date = DateTime.Now.ToString("dd.MM.yyyy"),
                     merchandId = group.Key,
                     items = group.Select(g => g).ToList(),
-                    total = 100 //group.Select(g => g).ToList().Sum(o => decimal.Parse(o.Item.price) * o.Item.quantity)
+                    total = group.Select(g => g).ToList().Sum(o => decimal.Parse(o.Item.price) * o.Item.quantity)
                 };
 
                 var renderer = new HtmlToPdf();
