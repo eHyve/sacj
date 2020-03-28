@@ -54,7 +54,7 @@ namespace Sacj.Api.Controllers
             return result;
         }
 
-        [HttpGet("statement/all")]
+        [HttpGet("statement/all")] //Génération PDF
         public async Task<int> GenerateAllStatements()
         {
             var reportRepo = new ReportRepo();
@@ -62,7 +62,7 @@ namespace Sacj.Api.Controllers
             return result;
         }
 
-        [HttpGet("statement/{productId}")]
+        [HttpGet("statement/{productId}")] //Génération PDF par commerçant
         public async Task<int> GenerateStatementById(long productId)
         {
             var reportRepo = new ReportRepo();
@@ -70,7 +70,7 @@ namespace Sacj.Api.Controllers
             return result;
         }
 
-        [HttpGet("conso/{productId}")]
+        [HttpGet("conso/{productId}")] //Retourne liste des données par commerçants
         public async Task<string> DoConso(long productId)
         {
             var consoRepo = new ConsoRepo();
@@ -79,7 +79,7 @@ namespace Sacj.Api.Controllers
             return "";
         }
 
-        [HttpGet("google/all")]
+        [HttpGet("google/all")] //Liste de tous les commerçants inscrits sur le sondage google
         public async Task<List<Merchant>> GetAllMerchants()
         {
             var googleRepo = new GoogleRepo();

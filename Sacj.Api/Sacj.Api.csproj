@@ -15,6 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="gift_cards_export_1.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="logo.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

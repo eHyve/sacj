@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace sacj.shopify
 {
-    public class ConsoRepo
+    public class ConsoRepo 
     {
-        public async Task<IEnumerable<IGrouping<long, OrderItemPair>>> GetAllConso()
+        public async Task<IEnumerable<IGrouping<long, OrderItemPair>>> GetAllConso()// Recherche toutes les données en 1 seule fois. 
         {
             try
             {
@@ -44,7 +44,7 @@ namespace sacj.shopify
 
         }
 
-        public async Task<IEnumerable<IGrouping<long, OrderItemPair>>> GetConsoByProductId(long productId)
+        public async Task<IEnumerable<IGrouping<long, OrderItemPair>>> GetConsoByProductId(long productId) //Recherches toutes les conso par commerçant
         {
             try
             {
