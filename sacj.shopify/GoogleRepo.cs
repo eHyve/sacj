@@ -42,7 +42,7 @@ namespace sacj.shopify
             });
         }
 
-        public async Task<List<Merchant>> GetAllMerchants()
+        public async Task<List<Merchant>> GetAllMerchants() //Lire les commerçants en direct
         {
             try
             {

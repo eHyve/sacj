@@ -12,7 +12,7 @@ namespace sacj.shopify
     public class ReportRepo
     {
 
-        public async Task<int> GenerateAllReports()
+        public async Task<int> GenerateAllReports() //Generation rapports 
         {
 			var nbGenerated = 0;
 			try
@@ -58,7 +58,7 @@ namespace sacj.shopify
             }
         }
 
-        private async Task<bool> GenerateStatement(IGrouping<long, OrderItemPair> group, Merchant merchant)
+        private async Task<bool> GenerateStatement(IGrouping<long, OrderItemPair> group, Merchant merchant) //Generate PDF
         {
             try
             {

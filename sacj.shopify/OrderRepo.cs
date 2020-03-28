@@ -12,7 +12,7 @@ namespace sacj.shopify
 {
 
 
-    public class OrderRepo
+    public class OrderRepo //Connexion Shopify
     {
         private readonly HttpClient client = new HttpClient();
 
