@@ -11,14 +11,22 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Google.Apis.Gmail.v1;
+using Google.Apis.Gmail.v1.Data;
+using System.Diagnostics;
+using System.Linq;
 
 namespace sacj.shopify
 {
     public class GoogleRepo
     {
-        string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
+        string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly,
+                            GmailService.Scope.GmailReadonly,   //TestListGmailLabels
+                            GmailService.Scope.GmailSend};
         private UserCredential credential;
         private SheetsService sheetService;
+        private GmailService gmailService;
+        private const string applicationName = "SACJ 1.0";
 
         public GoogleRepo()
         {
@@ -38,7 +46,14 @@ namespace sacj.shopify
             sheetService = new SheetsService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "SACJ 1.0",
+                ApplicationName = applicationName,
+            });
+
+            // Create Gmail API service.
+            gmailService = new GmailService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = applicationName,
             });
         }
 
@@ -73,6 +88,7 @@ namespace sacj.shopify
                         merchantList.Add(merchant);
                     }
                 }
+
                 return merchantList;
             }
             catch (Exception ex)
@@ -80,6 +96,109 @@ namespace sacj.shopify
                 return null;
             }
             
+        }
+
+
+        public async Task<int> GenerateAllEmails() //Generation rapports 
+        {
+            var nbGenerated = 0;
+            try
+            {
+                var consoRepo = new ConsoRepo();
+                var orderConso = await consoRepo.GetAllConso();
+
+                var merchants = await GetAllMerchants();
+
+                foreach (var group in orderConso)
+                {
+                    var merchant = merchants.Where(m => m.Id == group.Key).FirstOrDefault();
+                    nbGenerated += await GenerateEmail(group, merchant) ? 1 : 0;
+                }
+
+                return nbGenerated;
+            }
+            catch (Exception ex)
+            {
+                return nbGenerated;
+            }
+        }
+
+        public async Task<int> GenerateEmailsById(long id)
+        {
+            try
+            {
+                var consoRepo = new ConsoRepo();
+                var orderConso = await consoRepo.GetConsoByProductId(id);
+
+                var merchants = await GetAllMerchants();
+                var merchant = merchants.Where(m => m.Id == orderConso.First().Key).FirstOrDefault();
+
+                await GenerateEmail(orderConso.First(), merchant);
+                await TestListGmailLabels();
+
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        private static string Base64UrlEncode(string input)
+        {
+            var inputBytes = System.Text.Encoding.UTF8.GetBytes(input);
+            // Special "url-safe" base64 encode.
+            return Convert.ToBase64String(inputBytes)
+              .Replace('+', '-')
+              .Replace('/', '_')
+              .Replace("=", "");
+        }
+
+        private async Task<bool> GenerateEmail(IGrouping<long, OrderItemPair> group, Merchant merchant)
+        {
+            // Define parameters of request.           
+            string plainText = "To:noemie.petignat@gmail.com\r\n" +
+                               "Subject: Gmail Send API Test\r\n" +
+                               "Content-Type: text/html; charset=us-ascii\r\n\r\n" +
+                               "<h1>TestGmail API Testing for sending <h1>";
+
+            var newMsg = new Google.Apis.Gmail.v1.Data.Message();
+            newMsg.Raw = Base64UrlEncode(plainText.ToString());
+            gmailService.Users.Messages.Send(newMsg, "me").Execute();
+
+            return true;
+        }
+
+        private async Task<bool> TestListGmailLabels()
+        {
+            try
+            {
+                //Add "GmailService.Scope.GmailReadonly" in scope
+
+                // Define parameters of request.
+                UsersResource.LabelsResource.ListRequest GMailrequest = gmailService.Users.Labels.List("me");
+
+                // List labels.
+                IList<Label> labels = GMailrequest.Execute().Labels;
+                Console.WriteLine("Labels:");
+                if (labels != null && labels.Count > 0)
+                {
+                    foreach (var labelItem in labels)
+                    {
+                        Debug.WriteLine("{0}", labelItem.Name);
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine("No labels found.");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }
