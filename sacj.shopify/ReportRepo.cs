@@ -23,10 +23,14 @@ namespace sacj.shopify
                 var googleRepo = new GoogleRepo();
                 var merchants = await googleRepo.GetAllMerchants();
 
+                var paymentsRepo = new PaymentRepo();
+                var payments = await paymentsRepo.GetPayments();
+
                 foreach(var group in orderConso)
                 {
                     var merchant = merchants.Where(m => m.Id == group.Key).FirstOrDefault();
-                    nbGenerated += await GenerateStatement(group, merchant) ? 1 : 0;
+                    var paymentsList = payments.Where(p => p.Id == group.Key).ToList();
+                    nbGenerated += await GenerateStatement(group, merchant, paymentsList) ? 1 : 0;
                 }
 
                 return nbGenerated;
@@ -48,7 +52,11 @@ namespace sacj.shopify
                 var merchants = await googleRepo.GetAllMerchants();
                 var merchant = merchants.Where(m => m.Id == orderConso.First().Key).FirstOrDefault();
 
-                await GenerateStatement(orderConso.First(), merchant);
+                var paymentsRepo = new PaymentRepo();
+                var payments = await paymentsRepo.GetPayments();
+                var paymentsList = payments.Where(p => p.Id == orderConso.First().Key).ToList();
+
+                await GenerateStatement(orderConso.First(), merchant, paymentsList);
                 
                 return 1;
             }
@@ -58,16 +66,23 @@ namespace sacj.shopify
             }
         }
 
-        private async Task<bool> GenerateStatement(IGrouping<long, OrderItemPair> group, Merchant merchant) //Generate PDF
+        private async Task<bool> GenerateStatement(IGrouping<long, OrderItemPair> group, Merchant merchant, List<Payment> payments) //Generate PDF
         {
             try
             {
+                var giftTotal = group.Select(g => g).ToList().Sum(o => decimal.Parse(o.Item.price) * o.Item.quantity);
+                var paymentsTotal = payments.Sum(p => p.Total);
+                
                 var reportData = new {
                     merchant = merchant,
                     date = DateTime.Now.ToString("dd.MM.yyyy"),
                     merchandId = group.Key,
                     items = group.Select(g => g).ToList(),
-                    total = group.Select(g => g).ToList().Sum(o => decimal.Parse(o.Item.price) * o.Item.quantity)
+                    payments = payments,
+                    giftTotal = giftTotal,
+                    displayPayments = payments.Count() > 0,
+                    paymentsTotal = paymentsTotal,
+                    balance = giftTotal - paymentsTotal
                 };
 
                 var renderer = new HtmlToPdf();

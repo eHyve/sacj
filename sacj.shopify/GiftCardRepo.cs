@@ -17,8 +17,7 @@ namespace sacj.shopify
 
     public class GiftCardRepo
     {
-        private readonly HttpClient client = new HttpClient();
-
+        
         public GiftCardRepo()
         {
             

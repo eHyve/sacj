@@ -357,4 +357,18 @@ namespace sacj.shopify
         public string IBAN { get; set; }
     }
 
+    public class Payment
+    {
+        [Name("Id")]
+        public long Id { get; set; }
+        [Name("Date")]
+        public string Date { get; set; }
+        [Name("IBAN")]
+        public string IBAN { get; set; }
+        [Name("Nom")]
+        public string Nom { get; set; }
+        [Name("Total")]
+        public decimal Total { get; set; }
+    }
+
 }

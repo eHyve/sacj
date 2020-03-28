@@ -21,6 +21,9 @@
     <None Update="logo.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Payments.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Statement.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
