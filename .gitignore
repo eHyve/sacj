@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /Sacj.Api/token.json/Google.Apis.Auth.OAuth2.Responses.TokenResponse-user
+*.pdf
