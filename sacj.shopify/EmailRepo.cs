@@ -5,12 +5,47 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Net.Mail;
+using System.Net;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Gmail.v1;
+using Google.Apis.Gmail.v1.Data;
+using Google.Apis.Services;
+using Google.Apis.Util.Store;
 
 namespace sacj.shopify
 {
     public class EmailRepo
     {
+        string[] Scopes = { GmailService.Scope.GmailReadonly };
+        private UserCredential credential;
+        private GmailService gmailService;
+
+        public EmailRepo()
+        {
+            using (var stream = new FileStream("credentialsGMail.json", FileMode.Open, FileAccess.Read))
+            {
+                string credPath = "token.json";
+
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.Load(stream).Secrets,
+                    Scopes,
+                    "user",
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+            }
+
+            // Create Gmail API service.
+            gmailService = new GmailService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = "SACJ 1.0",
+            });
+        }
+
         public async Task<int> GenerateAllEmails() //Generation rapports 
         {
             var nbGenerated = 0;
@@ -61,60 +96,26 @@ namespace sacj.shopify
         {
             try
             {
-                //var reportData = new
-                //{
-                //    merchant = merchant,
-                //    date = DateTime.Now.ToString("dd.MM.yyyy"),
-                //    merchandId = group.Key,
-                //    items = group.Select(g => g).ToList(),
-                //    total = group.Select(g => g).ToList().Sum(o => decimal.Parse(o.Item.price) * o.Item.quantity)
-                //};
+                //Noémie pour tests, delete this line
+                merchant.Email = "noemie.petignat@gmail.com";
 
-                //var renderer = new HtmlToPdf();
+                // Define parameters of request.
+                UsersResource.LabelsResource.ListRequest request = gmailService.Users.Labels.List("me");
 
-                //// Basic settings
-                //renderer.PrintOptions.PaperSize = PdfPrintOptions.PdfPaperSize.A4;
-                //renderer.PrintOptions.MarginTop = 10;  //millimeters
-                //renderer.PrintOptions.MarginBottom = 24;
-                //renderer.PrintOptions.MarginLeft = 17;
-                //renderer.PrintOptions.MarginRight = 17;
-                //renderer.PrintOptions.CssMediaType = PdfPrintOptions.PdfCssMediaType.Print;
-
-                ////Header
-                //renderer.PrintOptions.Header = new HtmlHeaderFooter()
-                //{
-                //    DrawDividerLine = true,
-                //    HtmlFragment = "<img src='logo.jpg' height='40' ><div style='float:right;padding-top:15px;'><b>Action de soutien aux commerçants jurassiens</b></div>",
-                //    Height = 20
-                //};
-
-                //// Footer
-                //renderer.PrintOptions.Footer = new SimpleHeaderFooter()
-                //{
-                //    LeftText = "Imprimé {date} - {time}",
-                //    RightText = "Page {page}/{total-pages}",
-                //    DrawDividerLine = true,
-                //    FontSize = 10
-                //};
-
-                //Handlebars.RegisterHelper("formatDate", (writer, options, context, parameters) =>
-                //{
-                //    if (parameters.Length != 2)
-                //    {
-                //        writer.Write("formatDate:Wrong number of arguments");
-                //        return;
-                //    }
-                //    var dateFormatted = DateTime.Parse(parameters[0].ToString()).ToString(parameters[1].ToString());
-                //    writer.WriteSafeString(dateFormatted);
-                //});
-
-                //string source = File.ReadAllText(@"./Statement.html");
-
-                //var template = Handlebars.Compile(source);
-                //var content = template(reportData);
-                //var document = await renderer.RenderHtmlAsPdfAsync(content);
-
-                //document.SaveAs("./Statements/" + group.First().Item.title.Replace('/', '-').Replace(':', '-') + "_" + group.Key + ".pdf");
+                // List labels.
+                IList<Label> labels = request.Execute().Labels;
+                Console.WriteLine("Labels:");
+                if (labels != null && labels.Count > 0)
+                {
+                    foreach (var labelItem in labels)
+                    {
+                        Debug.WriteLine("{0}", labelItem.Name);
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine("No labels found.");
+                }
 
                 return true;
             }
