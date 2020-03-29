@@ -15,6 +15,9 @@ using Google.Apis.Gmail.v1;
 using Google.Apis.Gmail.v1.Data;
 using System.Diagnostics;
 using System.Linq;
+using MimeKit;
+using System.Net.Mail;
+using HandlebarsDotNet;
 
 namespace sacj.shopify
 {
@@ -134,7 +137,6 @@ namespace sacj.shopify
                 var merchant = merchants.Where(m => m.Id == orderConso.First().Key).FirstOrDefault();
 
                 await GenerateEmail(orderConso.First(), merchant);
-                await TestListGmailLabels();
 
                 return 1;
             }
@@ -156,17 +158,89 @@ namespace sacj.shopify
 
         private async Task<bool> GenerateEmail(IGrouping<long, OrderItemPair> group, Merchant merchant)
         {
-            // Define parameters of request.           
-            string plainText = "To:noemie.petignat@gmail.com\r\n" +
-                               "Subject: Gmail Send API Test\r\n" +
-                               "Content-Type: text/html; charset=us-ascii\r\n\r\n" +
-                               "<h1>TestGmail API Testing for sending <h1>";
+            try
+            {
+                if (merchant == null)
+                    return false;
 
-            var newMsg = new Google.Apis.Gmail.v1.Data.Message();
-            newMsg.Raw = Base64UrlEncode(plainText.ToString());
-            gmailService.Users.Messages.Send(newMsg, "me").Execute();
+                var emailTo = merchant.Email;
 
-            return true;
+                //TODO : Only for test, remove this line
+                emailTo = "noemie.petignat@gmail.com";
+                if (emailTo == "")
+                    return false;
+
+                var pdfFile = GetPDFAttachement(merchant.Id);
+                if (pdfFile == "")
+                {
+                    Debug.WriteLine("PDF File not found");
+                    return false;
+                }
+
+                var reportData = new
+                {
+                    merchant = merchant
+                };
+
+                Debug.WriteLine("PDF File to attach : "+pdfFile);
+
+                MailMessage mail = new MailMessage();
+                mail.Subject = "Soutien aux commerçants jurassiens : Extrait de compte";
+
+
+                string htmlSource = "";
+                using (StreamReader SourceReader = System.IO.File.OpenText("EmailTemplate.html"))
+                {
+                    htmlSource = SourceReader.ReadToEnd();
+                }
+
+                var template = Handlebars.Compile(htmlSource);
+                var content = template(reportData);
+
+                var builder = new BodyBuilder();
+                builder.HtmlBody = content;
+
+                mail.Body = builder.HtmlBody;
+                mail.From = new MailAddress("info.jced@gmail.com");
+                mail.IsBodyHtml = true;
+                mail.Attachments.Add(new Attachment(pdfFile));
+                mail.To.Add(new MailAddress(emailTo)); 
+                MimeKit.MimeMessage mimeMessage = MimeKit.MimeMessage.CreateFromMailMessage(mail);
+
+                Message message = new Message();
+                message.Raw = Base64UrlEncode(mimeMessage.ToString());
+                gmailService.Users.Messages.Send(message, "me").Execute();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private static string GetPDFAttachement(long merchantId)
+        {
+            try
+            {
+                var pdfStatementFiles = Directory.GetFiles("./Statements/");
+
+                foreach (string pdfFile in pdfStatementFiles)
+                {
+                    var pdfFileName = Path.GetFileNameWithoutExtension(pdfFile);
+                    var lastUnderscorePos = pdfFileName.LastIndexOf("_");
+                    var strMerchantId = pdfFileName.Substring(lastUnderscorePos + 1);
+
+                    if (strMerchantId == merchantId.ToString())
+                        return pdfFile;
+                }
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
         }
 
         private async Task<bool> TestListGmailLabels()
