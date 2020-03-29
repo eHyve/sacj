@@ -102,5 +102,13 @@ namespace Sacj.Api.Controllers
             var result = await googleRepo.GenerateEmailsById(productId);
             return result;
         }
+
+        [HttpGet("pain/do")] //Génération PDF par commerçant
+        public async Task<int> GeneratePaymentFile()
+        {
+            var painRepo = new PainRepo();
+            var result = await painRepo.GeneratePAINFile();
+            return result;
+        }
     }
 }

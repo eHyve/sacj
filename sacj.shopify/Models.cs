@@ -371,4 +371,20 @@ namespace sacj.shopify
         public decimal Total { get; set; }
     }
 
+    public class PainItem
+    {
+        [Name("Id")]
+        public long Id { get; set; }
+        [Name("IBAN")]
+        public string IBAN { get; set; }
+        [Name("BIC")]
+        public string BIC { get; set; }
+        [Name("Name")]
+        public string Name { get; set; }
+        [Name("Address")]
+        public string Address { get; set; }
+        [Name("Amount")]
+        public decimal Amount { get; set; }
+    }
+
 }

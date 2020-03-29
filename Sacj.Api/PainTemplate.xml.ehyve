@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:schemaLocation="http://www.six-interbank-clearing.com/de/pain.001.001.03.ch.02.xsd">
+  <CstmrCdtTrfInitn>
+    <GrpHdr>
+      <MsgId>{{uniqueId}}</MsgId>
+      <CreDtTm>{{creationDate}}</CreDtTm>
+      <NbOfTxs>{{itemNb}}</NbOfTxs>
+      <CtrlSum>{{ctrlSum}}</CtrlSum>
+      <InitgPty>
+        <Nm>eHyve Sàrl, Mettembert</Nm>
+      </InitgPty>
+    </GrpHdr>
+    {{#each paymentItems }}
+    <PmtInf>
+      <PmtInfId>{{guid}}</PmtInfId>
+      <PmtMtd>TRF</PmtMtd>
+      <BtchBookg>false</BtchBookg>
+      <ReqdExctnDt>{{executionDate}}</ReqdExctnDt>
+      <Dbtr>
+        <Nm>eHyve Sàrl, Mettembert</Nm>
+      </Dbtr>
+      <DbtrAcct>
+        <Id>
+          <IBAN>CH6104835116395451000</IBAN>
+        </Id>
+      </DbtrAcct>
+      <DbtrAgt>
+        <FinInstnId>
+          <BIC>CRESCHZZ80A</BIC>
+        </FinInstnId>
+      </DbtrAgt>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>{{transfertId}}</InstrId>
+          <EndToEndId>>E2E-ID-1</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="CHF">{{amount}}</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <BIC>{{BIC}}</BIC>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>{{Name}}</Nm>
+          <PstlAdr>
+            <Ctry>CH</Ctry>
+            <AdrLine>{{address}}</AdrLine>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <IBAN>{{IBAN}}</IBAN>
+          </Id>
+        </CdtrAcct>
+        <RmtInf></RmtInf>
+      </CdtTrfTxInf>
+    </PmtInf>
+    {{/each}}
+  </CstmrCdtTrfInitn>
+</Document>

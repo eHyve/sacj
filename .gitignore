@@ -340,3 +340,4 @@ ASALocalRun/
 healthchecksdb
 /Sacj.Api/token.json/Google.Apis.Auth.OAuth2.Responses.TokenResponse-user
 *.pdf
+/Sacj.Api/Pain/*
