@@ -166,7 +166,7 @@ namespace sacj.shopify
                 var emailTo = merchant.Email;
 
                 //TODO : Only for test, remove this line
-                emailTo = "noemie.petignat@gmail.com";
+                //emailTo = "noemie.petignat@gmail.com";
                 if (emailTo == "")
                     return false;
 
