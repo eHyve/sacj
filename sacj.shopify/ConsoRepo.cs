@@ -26,7 +26,7 @@ namespace sacj.shopify
                                              orderItem.GiftCards = giftCards.gift_cards.Where(gc => gc.initial_value.Equals(orderItem.Item.price) &&
                                                                                                    gc.order_name.Equals(orderItem.Order.name) &&
                                                                                                    //gc.customer_name.Equals(orderItem.Order.billing_address.name) &&
-                                                                                                   gc.customer_email.Equals(orderItem.Order.contact_email)).ToList();
+                                                                                                   gc.customer_email.Equals(orderItem.Order.contact_email)).Take(orderItem.Item.quantity).ToList();
                                              return orderItem;
                                          }).ToList();
                                          return group;

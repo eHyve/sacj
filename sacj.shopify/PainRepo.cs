@@ -26,18 +26,19 @@ namespace sacj.shopify
                 var painItems = GetPainItems();
 
                 var paymentItems = painItems.Select(p => { return new { 
-                    guid = Guid.NewGuid(),
+                    guid = Guid.NewGuid().ToString().Replace("-",""),
                     executionDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"),
                     IBAN = p.IBAN.Replace(" ",""),
                     BIC = p.BIC,
                     name = p.Name,
                     address = p.Address,
                     amount = p.Amount,
-                    transfertId = Guid.NewGuid()
+                    transfertId = Guid.NewGuid().ToString().Replace("-", ""),
+                    e2eId = Guid.NewGuid().ToString().Replace("-", "")
                 }; }).ToList();
 
                 var paymentData = new {
-                    uniqueId = Guid.NewGuid(),
+                    uniqueId = Guid.NewGuid().ToString().Replace("-", ""),
                     creationDate = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssK"),
                     itemNb = painItems.Count(),
                     ctrlSum = painItems.Sum(p => p.Amount),

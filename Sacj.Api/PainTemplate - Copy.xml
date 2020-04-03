@@ -8,10 +8,6 @@
       <CtrlSum>{{ctrlSum}}</CtrlSum>
       <InitgPty>
         <Nm>Jeune Chambre Internationale</Nm>
-        <CtctDtls>
-          <Nm>SACJ</Nm>
-          <Othr>1.0.0</Othr>
-        </CtctDtls>
       </InitgPty>
     </GrpHdr>
     {{#each paymentItems }}
@@ -36,7 +32,7 @@
       <CdtTrfTxInf>
         <PmtId>
           <InstrId>{{transfertId}}</InstrId>
-          <EndToEndId>{{e2eId}}</EndToEndId>
+          <EndToEndId>>E2E-ID-1</EndToEndId>
         </PmtId>
         <Amt>
           <InstdAmt Ccy="CHF">{{amount}}</InstdAmt>
@@ -58,9 +54,7 @@
             <IBAN>{{IBAN}}</IBAN>
           </Id>
         </CdtrAcct>
-        <RmtInf>
-          <Ustrd>SACJ</Ustrd>
-        </RmtInf>
+        <RmtInf></RmtInf>
       </CdtTrfTxInf>
     </PmtInf>
     {{/each}}

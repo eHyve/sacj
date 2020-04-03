@@ -24,6 +24,12 @@
     <None Update="Pain.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="PainTemplate - Copy.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PainTemplate - Copy.xml.ehyve">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="PainTemplate.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -36,10 +42,6 @@
     <None Update="Statement.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pain\" />
   </ItemGroup>
 
 
