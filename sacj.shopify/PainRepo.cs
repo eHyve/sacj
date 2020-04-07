@@ -27,8 +27,8 @@ namespace sacj.shopify
 
                 var paymentItems = painItems.Select(p => { return new { 
                     guid = Guid.NewGuid().ToString().Replace("-",""),
-                    executionDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"),
-                    IBAN = p.IBAN.Replace(" ",""),
+                    executionDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                    IBAN = p.IBAN.ToUpper().Replace(" ",""),
                     BIC = p.BIC,
                     name = p.Name,
                     address = p.Address,
@@ -45,11 +45,11 @@ namespace sacj.shopify
                     paymentItems = paymentItems
                 };
 
-                string source = File.ReadAllText(@"./PainTemplate.xml");
+                string source = File.ReadAllText(@"./PainTemplate.xml", Encoding.UTF8);
                 var template = Handlebars.Compile(source);
                 var content = template(paymentData);
 
-                using (StreamWriter sw = new StreamWriter($"./Pain/{DateTime.Now.ToString("yyyyMMddhhmmss")}.xml"))
+                using (StreamWriter sw = new StreamWriter(new FileStream($"./Pain/{DateTime.Now.ToString("yyyyMMddhhmmss")}.xml", FileMode.CreateNew, FileAccess.ReadWrite), Encoding.UTF8))
                 {
                     sw.Write(content);
                 }
@@ -71,6 +71,7 @@ namespace sacj.shopify
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
                     csv.Configuration.RegisterClassMap<PaymentMap>();
+                    csv.Configuration.Encoding = Encoding.UTF8;
                     painItems = csv.GetRecords<PainItem>().ToList();
                     return painItems;
                 }

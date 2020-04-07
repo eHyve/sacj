@@ -24,6 +24,12 @@
     <None Update="Pain.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="PainTemplate.xml.jp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PainTemplate - Copy %282%29.xml.ehyve">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="PainTemplate - Copy.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

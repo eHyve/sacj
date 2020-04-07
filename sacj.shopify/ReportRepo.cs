@@ -129,7 +129,7 @@ namespace sacj.shopify
                 var content = template(reportData);
                 var document = await renderer.RenderHtmlAsPdfAsync(content);
 
-                document.SaveAs("./Statements/" + group.First().Item.title.Replace('/','-').Replace(':', '-') + "_" + group.Key + ".pdf");
+                document.SaveAs("./Statements/" + group.First().Item.title.Replace('/','-').Replace(':', '-').Replace("\"","") + "_" + group.Key + ".pdf");
 
                 return true;
             }

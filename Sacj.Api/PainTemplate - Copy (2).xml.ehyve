@@ -7,11 +7,7 @@
       <NbOfTxs>{{itemNb}}</NbOfTxs>
       <CtrlSum>{{ctrlSum}}</CtrlSum>
       <InitgPty>
-        <Nm>Jeune Chambre Internationale</Nm>
-        <CtctDtls>
-          <Nm>SACJ</Nm>
-          <Othr>1.0.0</Othr>
-        </CtctDtls>
+        <Nm>eHyve Sàrl, Mettembert</Nm>
       </InitgPty>
     </GrpHdr>
     {{#each paymentItems }}
@@ -21,22 +17,22 @@
       <BtchBookg>false</BtchBookg>
       <ReqdExctnDt>{{executionDate}}</ReqdExctnDt>
       <Dbtr>
-        <Nm>Jeune Chambre Internationale</Nm>
+        <Nm>eHyve Sàrl, Mettembert</Nm>
       </Dbtr>
       <DbtrAcct>
         <Id>
-          <IBAN>CH9806300016070148408</IBAN>
+          <IBAN>CH6104835116395451000</IBAN>
         </Id>
       </DbtrAcct>
       <DbtrAgt>
         <FinInstnId>
-          <BIC>VABECH22XXX</BIC>
+          <BIC>CRESCHZZ80A</BIC>
         </FinInstnId>
       </DbtrAgt>
       <CdtTrfTxInf>
         <PmtId>
           <InstrId>{{transfertId}}</InstrId>
-          <EndToEndId>{{e2eId}}</EndToEndId>
+          <EndToEndId>>E2E-ID-1</EndToEndId>
         </PmtId>
         <Amt>
           <InstdAmt Ccy="CHF">{{amount}}</InstdAmt>
@@ -47,10 +43,10 @@
           </FinInstnId>
         </CdtrAgt>
         <Cdtr>
-          <Nm>{{{Name}}}</Nm>
+          <Nm>{{Name}}</Nm>
           <PstlAdr>
             <Ctry>CH</Ctry>
-            <AdrLine>{{{address}}}</AdrLine>
+            <AdrLine>{{address}}</AdrLine>
           </PstlAdr>
         </Cdtr>
         <CdtrAcct>
@@ -58,9 +54,7 @@
             <IBAN>{{IBAN}}</IBAN>
           </Id>
         </CdtrAcct>
-        <RmtInf>
-          <Ustrd>SACJ</Ustrd>
-        </RmtInf>
+        <RmtInf></RmtInf>
       </CdtTrfTxInf>
     </PmtInf>
     {{/each}}

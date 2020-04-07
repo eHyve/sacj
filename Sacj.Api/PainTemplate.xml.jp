@@ -7,7 +7,7 @@
       <NbOfTxs>{{itemNb}}</NbOfTxs>
       <CtrlSum>{{ctrlSum}}</CtrlSum>
       <InitgPty>
-        <Nm>Jeune Chambre Internationale</Nm>
+        <Nm>Jean-Philippe Steullet</Nm>
         <CtctDtls>
           <Nm>SACJ</Nm>
           <Othr>1.0.0</Othr>
@@ -21,16 +21,16 @@
       <BtchBookg>false</BtchBookg>
       <ReqdExctnDt>{{executionDate}}</ReqdExctnDt>
       <Dbtr>
-        <Nm>Jeune Chambre Internationale</Nm>
+        <Nm>Jean-Philippe Steullet</Nm>
       </Dbtr>
       <DbtrAcct>
         <Id>
-          <IBAN>CH9806300016070148408</IBAN>
+          <IBAN>CH1800789100001835006</IBAN>
         </Id>
       </DbtrAcct>
       <DbtrAgt>
         <FinInstnId>
-          <BIC>VABECH22XXX</BIC>
+          <BIC>BCJUCH22XXX</BIC>
         </FinInstnId>
       </DbtrAgt>
       <CdtTrfTxInf>
