@@ -27,7 +27,7 @@ namespace sacj.shopify
 
                 var paymentItems = painItems.Select(p => { return new { 
                     guid = Guid.NewGuid().ToString().Replace("-",""),
-                    executionDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                    executionDate = DateTime.Now.AddDays(15).ToString("yyyy-MM-dd"),
                     IBAN = p.IBAN.ToUpper().Replace(" ",""),
                     BIC = p.BIC,
                     name = p.Name,
