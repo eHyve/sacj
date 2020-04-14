@@ -71,7 +71,8 @@ namespace sacj.shopify
             try
             {
                 //TODO: FIX HERE for gift total, calculate on gift cards and not items
-                var giftTotal = group.Select(g => g).ToList().Sum(o => decimal.Parse(o.Item.price) * o.Item.quantity);
+                //var giftTotal = group.Select(g => g).ToList().Sum(o => decimal.Parse(o.Item.price) * o.Item.quantity);
+                var giftTotal = group.Select(g => g).Select(g => g.GiftCards).Sum(gc => gc.Sum(x => decimal.Parse(x.initial_value)));
                 var paymentsTotal = payments.Sum(p => p.Total);
                 
                 var reportData = new {
