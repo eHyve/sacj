@@ -59,16 +59,36 @@ namespace sacj.shopify
                                      .Where(pair => pair.Item.product_id == productId)
                                      .GroupBy(pair => pair.Item.product_id)
                                      .Select(group => {
-                                         group.Select(orderItem => {
-                                             orderItem.GiftCards = giftCards.gift_cards.Where(gc => gc.initial_value.Equals(orderItem.Item.price) &&
-                                                                                                    gc.order_name.Equals(orderItem.Order.name) &&
-                                                                                                    //gc.customer_name.Equals(orderItem.Order.billing_address.name) &&
-                                                                                                    gc.customer_email.Equals(orderItem.Order.contact_email)).Take(orderItem.Item.quantity).ToList();
-                                             return orderItem;
-                                         }).ToList();
-                                         return group; 
+                                         if (productId == 4716981780616) // HOT FIX Coup de Patte
+                                         {
+                                             group.Select(orderItem =>
+                                             {
+                                                 if (orderItem.Item.name.StartsWith("Au coup de patte"))
+                                                 {
+                                                     orderItem.GiftCards = giftCards.gift_cards.Where(gc => gc.initial_value.Equals(orderItem.Item.price) &&
+                                                                                                            gc.order_name.Equals(orderItem.Order.name) &&
+                                                                                                            //gc.customer_name.Equals(orderItem.Order.billing_address.name) &&
+                                                                                                            gc.customer_email.Equals(orderItem.Order.contact_email)).Take(orderItem.Item.quantity).ToList();
+                                                 }
+                                                 return orderItem;
+                                             }).Select(o => o.GiftCards != null).ToList();
+                                             return group;
+                                         }
+                                         else
+                                         {
+                                             group.Select(orderItem =>
+                                             {
+                                                 orderItem.GiftCards = giftCards.gift_cards.Where(gc => gc.initial_value.Equals(orderItem.Item.price) &&
+                                                                                                        gc.order_name.Equals(orderItem.Order.name) &&
+                                                                                                        //gc.customer_name.Equals(orderItem.Order.billing_address.name) &&
+                                                                                                        gc.customer_email.Equals(orderItem.Order.contact_email)).Take(orderItem.Item.quantity).ToList();
+                                                 return orderItem;
+                                             }).ToList();
+                                             return group;
+                                         }
                                      }).ToList();
 
+                
                 return ordersByProdId;
                 
             }
