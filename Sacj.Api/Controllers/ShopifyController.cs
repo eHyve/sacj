@@ -78,6 +78,14 @@ namespace Sacj.Api.Controllers
             var result = await consoRepo.GetAllConso();
             return "";
         }
+        
+        [HttpGet("fullfillements/all")] //Retourne liste des données par commerçants
+        public async Task<string> Fullfillements(long productId)
+        {
+            var consoRepo = new ConsoRepo();
+            var result = await consoRepo.GetFullfillements();
+            return "";
+        }
 
         [HttpGet("google/all")] //Liste de tous les commerçants inscrits sur le sondage google
         public async Task<List<Merchant>> GetAllMerchants()

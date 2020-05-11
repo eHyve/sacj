@@ -342,6 +342,8 @@ namespace sacj.shopify
         public string customer_email { get; set; }
         [Name("Order Name")]
         public string order_name { get; set; }
+        [Name("Line_Item_Id")]
+        public long line_item_id { get; set; }
     }
 
     public class Merchant

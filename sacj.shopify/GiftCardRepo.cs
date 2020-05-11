@@ -32,6 +32,7 @@ namespace sacj.shopify
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
                     csv.Configuration.RegisterClassMap<GiftCardMap>();
+                    csv.Configuration.Delimiter = ";";
                     var records = csv.GetRecords<GiftCard>().ToList();
                     giftCards.gift_cards = records;
                     return giftCards;
@@ -63,6 +64,7 @@ namespace sacj.shopify
             Map(g => g.customer_name).Name("Customer Name");
             Map(g => g.customer_email).Name("Email");
             Map(g => g.order_name).Name("Order Name");
+            Map(g => g.line_item_id).Name("Line_Item_Id");
         }
     }
 
